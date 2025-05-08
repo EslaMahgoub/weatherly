@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { createTheme, ThemeProvider, Typography } from "@mui/material";
+import "./App.css";
 
+const theme = createTheme({
+  typography: {
+    fontFamily: ["IBM"],
+  },
+  palette: {
+    primary: {
+      main: "#311b92",
+    },
+  },
+});
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App" style={{ fontFamily: "IBM" }}>
+        <Typography variant="h1" gutterBottom>
+          طقساوي
+        </Typography>
+      </div>
+    </ThemeProvider>
   );
 }
 
