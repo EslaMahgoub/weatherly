@@ -1,5 +1,6 @@
-import { createTheme, ThemeProvider, Typography } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
 import "./App.css";
+import WeatherCard from "./components/WeatherCard";
 
 const theme = createTheme({
   typography: {
@@ -14,10 +15,8 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <div className="App" style={{ fontFamily: "IBM" }}>
-        <Typography variant="h1" gutterBottom>
-          طقساوي
-        </Typography>
+      <div className="App">
+        <WeatherCard />
       </div>
     </ThemeProvider>
   );
