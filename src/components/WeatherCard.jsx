@@ -10,9 +10,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
 import "moment/min/locales";
+import { useTranslation } from "react-i18next";
+
 moment.locale("ar");
 
 export default function WeatherCard() {
+  // STATES
+  const { t, i18n } = useTranslation();
+
   const [temp, setTemp] = useState({
     number: null,
     description: "",
@@ -21,6 +26,14 @@ export default function WeatherCard() {
     icon: null,
   });
   const [dateAndTime, setDateAndTime] = useState("");
+
+  const [locale, setLocale] = useState("ar");
+  const direction = locale === "ar" ? "rtl" : "ltr";
+
+  useEffect(() => {
+    i18n.changeLanguage("ar");
+  }, [i18n]);
+
   useEffect(() => {
     setDateAndTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
     const controller = new AbortController();
@@ -58,8 +71,22 @@ export default function WeatherCard() {
     return () => {
       controller.abort("Component unmounted");
     };
-  }, []);
+  }, [i18n]);
 
+  //   Event Handlers
+  function handleLanguageClick() {
+    if (locale === "en") {
+      setLocale("ar");
+      i18n.changeLanguage("ar");
+      moment.locale("ar");
+    } else {
+      setLocale("en");
+      i18n.changeLanguage("en");
+      moment.locale("en");
+    }
+
+    setDateAndTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
+  }
   return (
     <Container maxWidth="md">
       <Card
@@ -78,32 +105,38 @@ export default function WeatherCard() {
               alignItems: "end",
               justifyContent: "start",
             }}
-            dir="rtl"
+            dir={direction}
           >
             <Typography variant="h2" style={{ marginRight: "10px" }}>
-              كراكوف
+              {t("Kraków")}
             </Typography>
-            <Typography variant="h4" style={{ marginRight: "20px" }}>
+            <Typography variant="h5" style={{ marginRight: "20px" }}>
               {dateAndTime}
             </Typography>
           </div>
           <Divider sx={{ background: "white" }} />
-          <Grid container spacing={2} dir="rtl">
+          <Grid container spacing={2} dir={direction}>
             <Grid
               size={8}
-              style={{ marginTop: "20px", mt: 2, textAlign: "right" }}
+              style={{
+                marginTop: "20px",
+                mt: 2,
+                textAlign: locale === "ar" ? "right" : "left",
+              }}
             >
               <Box sx={{ display: "flex" }}>
                 <Typography variant="h1">{temp.number}</Typography>
                 <img src={temp.icon} alt="Temperature Icon" />
               </Box>
-
-              {/* Todo: weather image */}
-              <Typography variant="h6">{temp.description}</Typography>
+              <Typography variant="h6">{t(temp.description)}</Typography>
               <Box sx={{ display: "flex" }}>
-                <Typography variant="h5">الصغري: {temp.min} </Typography>
+                <Typography variant="h5">
+                  {t("min")}: {temp.min}{" "}
+                </Typography>
                 <Typography variant="h5">|</Typography>
-                <Typography variant="h5">الكبري: {temp.max}</Typography>
+                <Typography variant="h5">
+                  {t("max")}: {temp.max}
+                </Typography>
               </Box>
             </Grid>
             <Grid size={4}>
@@ -111,9 +144,14 @@ export default function WeatherCard() {
             </Grid>
           </Grid>
         </CardContent>
-        <CardActions>
-          <Button variant="contained" color="success">
-            English
+
+        <CardActions dir={direction}>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleLanguageClick}
+          >
+            {locale === "en" ? "Arabic" : "انجليزي"}
           </Button>
         </CardActions>
       </Card>
