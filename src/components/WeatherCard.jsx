@@ -8,6 +8,9 @@ import { Box, Container, Divider, Grid } from "@mui/material";
 import CloudIcon from "@mui/icons-material/Cloud";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import moment from "moment";
+import "moment/min/locales";
+moment.locale("ar");
 
 export default function WeatherCard() {
   const [temp, setTemp] = useState({
@@ -17,7 +20,9 @@ export default function WeatherCard() {
     max: null,
     icon: null,
   });
+  const [dateAndTime, setDateAndTime] = useState("");
   useEffect(() => {
+    setDateAndTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
     const controller = new AbortController();
 
     axios
@@ -79,7 +84,7 @@ export default function WeatherCard() {
               كراكوف
             </Typography>
             <Typography variant="h4" style={{ marginRight: "20px" }}>
-              الاثنين 25-10-2025
+              {dateAndTime}
             </Typography>
           </div>
           <Divider sx={{ background: "white" }} />
